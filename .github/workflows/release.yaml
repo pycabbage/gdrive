@@ -7,16 +7,20 @@ on:
 name: Build Release
 jobs:
   release:
-    name: release linux/386
+    name: release
     runs-on: ubuntu-latest
     strategy:
       matrix:
         arch: ["386", "amd64", "arm", "arm64"]
         os: ["linux", "windows", "darwin", "android"]
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          cache: true
       - name: compile and release
-        uses: ngs/go-release.action@v1.0.1
+        uses: ngs/go-release.action@v1.0.2
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GOARCH: ${{ matrix.arch }}

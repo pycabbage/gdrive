@@ -9,9 +9,9 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/prasmussen/gdrive/auth"
-	"github.com/prasmussen/gdrive/cli"
-	"github.com/prasmussen/gdrive/drive"
+	"github.com/pycabbage/gdrive/auth"
+	"github.com/pycabbage/gdrive/cli"
+	"github.com/pycabbage/gdrive/drive"
 )
 
 const ClientId = "523918217787-j7ui00dcpnhelkt9si2scdvu6ccjg245.apps.googleusercontent.com"
