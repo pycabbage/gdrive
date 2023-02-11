@@ -1,5 +1,7 @@
 on:
   push:
+    paths-ignore:
+      - "*.md"
   workflow_dispatch:
 
 name: Build
@@ -74,6 +76,7 @@ jobs:
         env:
           GOOS: ${{ matrix.osarch.GOOS }}
           GOARCH: ${{ matrix.osarch.GOARCH }}
+          CGO_ENABLED: 0
         run: |
           go build -ldflags '-w -s' -o ${{ env.NAME }}${{ env.EXTENSION }}
       - name: upload release

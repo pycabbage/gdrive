@@ -1,25 +1,37 @@
-gdrive
-======
+# gdrive
 
+Build status: [![Build](https://github.com/pycabbage/gdrive/actions/workflows/build.yaml/badge.svg)](https://github.com/pycabbage/gdrive/actions/workflows/build.yaml)
 
 ## Overview
+
 gdrive is a command line utility for interacting with Google Drive.
 
 ## News
-#### 28.05.2021
+
+### 28.05.2021
+
 gdrive is finally verified for using sensitive scopes which should fix the `This app is blocked` error. Note that the project name will show up as `project-367116221053` when granting access to you account. (I don't dare to change any more settings in the google console.)
 
 ## Prerequisites
+
 None, binaries are statically linked.
 If you want to compile from source you need the [go toolchain](http://golang.org/doc/install).
 Version 1.5 or higher.
 
 ## Installation
+
+### Download prebuilt binaries
+
+<https://nightly.link/pycabbage/gdrive/workflows/build.yaml/master>
+
 ### With [Homebrew](http://brew.sh) on Mac
-```
+
+```bash
 brew install gdrive
 ```
+
 ### Other
+
 Download `gdrive` from one of the [links in the latest release](https://github.com/prasmussen/gdrive/releases).
 The first time gdrive is launched (i.e. run `gdrive about` in your
 terminal not just `gdrive`), you will be prompted for a verification code.
@@ -33,13 +45,15 @@ Example: `GDRIVE_CONFIG_DIR="/home/user/.gdrive-secondary" gdrive list`
 You will be prompted for a new verification code if the folder does not exist.
 
 ## Compile from source
+
 ```bash
 go get github.com/prasmussen/gdrive
 ```
+
 The gdrive binary should now be available at `$GOPATH/bin/gdrive`
 
-
 ### Syncing
+
 Gdrive supports basic syncing. It only syncs one way at the time and works
 more like rsync than e.g. dropbox. Files that are synced to google drive
 are tagged with an appProperty so that the files on drive can be traversed
@@ -52,21 +66,23 @@ the speed can be improved in the future by uploading several files concurrently.
 To learn more see usage and the examples below.
 
 ### Service Account
-For server to server communication, where user interaction is not a viable option, 
+
+For server to server communication, where user interaction is not a viable option,
 is it possible to use a service account, as described in this [Google document](https://developers.google.com/identity/protocols/OAuth2ServiceAccount).
 If you want to use a service account, instead of being interactively prompted for
-authentication, you need to use the `--service-account <serviceAccountCredentials>` 
+authentication, you need to use the `--service-account <serviceAccountCredentials>`
 global option, where `serviceAccountCredentials` is a file in JSON format obtained
-through the Google API Console, and its location is relative to the config dir. 
+through the Google API Console, and its location is relative to the config dir.
 
 #### .gdriveignore
+
 Placing a .gdriveignore in the root of your sync directory can be used to
 skip certain files from being synced. .gdriveignore follows the same
 rules as [.gitignore](https://git-scm.com/docs/gitignore), except that gdrive only reads the .gdriveignore file in the root of the sync directory, not ones in any subdirectories.
 
-
 ## Usage
-```
+
+```plaintext
 gdrive [global] list [options]                                 List files
 gdrive [global] download [options] <fileId>                    Download file or directory
 gdrive [global] download query [options] <query>               Download all files and directories matching query
@@ -98,8 +114,9 @@ gdrive help <command>                                          Print command hel
 gdrive help <command> <subcommand>                             Print subcommand help
 ```
 
-#### List files
-```
+### List files
+
+```plaintext
 gdrive [global] list [options]
 
 global:
@@ -120,13 +137,13 @@ options:
 
 List file in subdirectory
 
-
-```
+```bash
 ./gdrive list --query " 'IdOfTheParentFolder' in parents"
 ```
 
 #### Download file or directory
-```
+
+```plaintext
 gdrive [global] download [options] <fileId>
 
 global:
@@ -146,7 +163,8 @@ options:
 ```
 
 #### Download all files and directories matching query
-```
+
+```plaintext
 gdrive [global] download query [options] <query>
 
 global:
@@ -163,7 +181,8 @@ options:
 ```
 
 #### Upload file or directory
-```
+
+```plaintext
 gdrive [global] upload [options] <path>
 
 global:
@@ -186,7 +205,8 @@ options:
 ```
 
 #### Upload file from stdin
-```
+
+```plaintext
 gdrive [global] upload - [options] <name>
 
 global:
@@ -206,7 +226,8 @@ options:
 ```
 
 #### Update file, this creates a new revision of the file
-```
+
+```plaintext
 gdrive [global] update [options] <fileId> <path>
 
 global:
@@ -226,7 +247,8 @@ options:
 ```
 
 #### Show file info
-```
+
+```plaintext
 gdrive [global] info [options] <fileId>
 
 global:
@@ -240,7 +262,8 @@ options:
 ```
 
 #### Create directory
-```
+
+```plaintext
 gdrive [global] mkdir [options] <name>
 
 global:
@@ -255,7 +278,8 @@ options:
 ```
 
 #### Share file or directory
-```
+
+```plaintext
 gdrive [global] share [options] <fileId>
 
 global:
@@ -273,7 +297,8 @@ options:
 ```
 
 #### List files permissions
-```
+
+```plaintext
 gdrive [global] share list <fileId>
 
 global:
@@ -284,7 +309,8 @@ global:
 ```
 
 #### Revoke permission
-```
+
+```plaintext
 gdrive [global] share revoke <fileId> <permissionId>
 
 global:
@@ -295,7 +321,8 @@ global:
 ```
 
 #### Delete file or directory
-```
+
+```plaintext
 gdrive [global] delete [options] <fileId>
 
 global:
@@ -309,7 +336,8 @@ options:
 ```
 
 #### List all syncable directories on drive
-```
+
+```plaintext
 gdrive [global] sync list [options]
 
 global:
@@ -323,7 +351,8 @@ options:
 ```
 
 #### List content of syncable directory
-```
+
+```plaintext
 gdrive [global] sync content [options] <fileId>
 
 global:
@@ -340,7 +369,8 @@ options:
 ```
 
 #### Sync drive directory to local directory
-```
+
+```plaintext
 gdrive [global] sync download [options] <fileId> <path>
 
 global:
@@ -360,7 +390,8 @@ options:
 ```
 
 #### Sync local directory to drive
-```
+
+```plaintext
 gdrive [global] sync upload [options] <path> <fileId>
 
 global:
@@ -381,7 +412,8 @@ options:
 ```
 
 #### List file changes
-```
+
+```plaintext
 gdrive [global] changes [options]
 
 global:
@@ -399,7 +431,8 @@ options:
 ```
 
 #### List file revisions
-```
+
+```plaintext
 gdrive [global] revision list [options] <fileId>
 
 global:
@@ -415,7 +448,8 @@ options:
 ```
 
 #### Download revision
-```
+
+```plaintext
 gdrive [global] revision download [options] <fileId> <revId>
 
 global:
@@ -433,7 +467,8 @@ options:
 ```
 
 #### Delete file revision
-```
+
+```plaintext
 gdrive [global] revision delete <fileId> <revId>
 
 global:
@@ -444,7 +479,8 @@ global:
 ```
 
 #### Upload and convert file to a google document, see 'about import' for available conversions
-```
+
+```plaintext
 gdrive [global] import [options] <path>
 
 global:
@@ -459,7 +495,8 @@ options:
 ```
 
 #### Export a google document
-```
+
+```plaintext
 gdrive [global] export [options] <fileId>
 
 global:
@@ -475,7 +512,8 @@ options:
 ```
 
 #### Google drive metadata, quota usage
-```
+
+```plaintext
 gdrive [global] about [options]
 
 global:
@@ -489,7 +527,8 @@ options:
 ```
 
 #### Show supported import formats
-```
+
+```plaintext
 gdrive [global] about import
 
 global:
@@ -500,7 +539,8 @@ global:
 ```
 
 #### Show supported export formats
-```
+
+```plaintext
 gdrive [global] about export
 
 global:
@@ -510,10 +550,11 @@ global:
   --service-account <accountFile>  Oauth service account filename, used for server to server communication without user interaction (file is relative to config dir)
 ```
 
-
 ## Examples
-#### List files
-```
+
+### List files
+
+```plaintext
 $ gdrive list
 Id                             Name                    Type   Size     Created
 0B3X9GlR6EmbnZ3gyeGw4d3ozbUk   drive-windows-x64.exe   bin    6.6 MB   2015-07-18 16:43:58
@@ -524,7 +565,8 @@ Id                             Name                    Type   Size     Created
 ```
 
 #### List largest files
-```
+
+```plaintext
 $ gdrive list --query "name contains 'gdrive'" --order "quotaBytesUsed desc" -m 3
 Id                             Name                     Type   Size     Created
 0B3X9GlR6EmbnZXpDRG1xblM2LTg   gdrive-linux-mips64      bin    8.5 MB   2016-02-22 21:07:04
@@ -533,53 +575,61 @@ Id                             Name                     Type   Size     Created
 ```
 
 #### Upload file
-```
+
+```plaintext
 $ gdrive upload gdrive-osx-x64
 Uploading gdrive-osx-x64
 Uploaded 0B3X9GlR6EmbnZ1NGS25FdEVlWEk at 3.8 MB/s, total 8.3 MB
 ```
 
 #### Make directory
-```
+
+```plaintext
 $ gdrive mkdir gdrive-bin
 Directory 0B3X9GlR6EmbnY1RLVTk5VUtOVkk created
 ```
 
 #### Upload file to directory
-```
+
+```plaintext
 $ gdrive upload --parent 0B3X9GlR6EmbnY1RLVTk5VUtOVkk gdrive-osx-x64
 Uploading gdrive-osx-x64
 Uploaded 0B3X9GlR6EmbnNTk0SkV0bm5Hd0E at 2.5 MB/s, total 8.3 MB
 ```
 
 #### Download file
-```
+
+```plaintext
 $ gdrive download 0B3X9GlR6EmbnZ1NGS25FdEVlWEk
 Downloading gdrive-osx-x64 -> gdrive-osx-x64
 Downloaded 0B3X9GlR6EmbnZ1NGS25FdEVlWEk at 8.3 MB/s, total 8.3 MB
 ```
 
 #### Share a file
-```
+
+```plaintext
 $ gdrive share 0B3X9GlR6EmbnNTk0SkV0bm5Hd0E
 Granted reader permission to anyone
 ```
 
 #### Pipe content directly to google drive
-```
+
+```plaintext
 $ echo "Hello World" | gdrive upload - hello.txt
 Uploading hello.txt
 Uploaded 0B3X9GlR6EmbnaXVrOUpIcWlUS0E at 8.0 B/s, total 12.0 B
 ```
 
 #### Print file to stdout
-```
+
+```plaintext
 $ gdrive download --stdout 0B3X9GlR6EmbnaXVrOUpIcWlUS0E
 Hello World
 ```
 
 #### Get file info
-```
+
+```plaintext
 $ gdrive info 0B3X9GlR6EmbnNTk0SkV0bm5Hd0E
 Id: 0B3X9GlR6EmbnNTk0SkV0bm5Hd0E
 Name: gdrive-osx-x64
@@ -596,41 +646,47 @@ DownloadUrl: https://docs.google.com/uc?id=0B3X9GlR6EmbnNTk0SkV0bm5Hd0E&export=d
 ```
 
 #### Update file (create new revision)
-```
+
+```plaintext
 $ gdrive update 0B3X9GlR6EmbnNTk0SkV0bm5Hd0E gdrive-osx-x64
 Uploading gdrive-osx-x64
 Updated 0B3X9GlR6EmbnNTk0SkV0bm5Hd0E at 2.0 MB/s, total 8.3 MB
 ```
 
-#### List file revisions
-```
+### List file revisions
+
+```plaintext
 $ gdrive revision list 0B3X9GlR6EmbnNTk0SkV0bm5Hd0E
 Id                                                    Name             Size     Modified              KeepForever
 0B3X9GlR6EmbnOFlHSTZQNWJWMGN2ckZucC9VaEUwczV1cUNrPQ   gdrive-osx-x64   8.3 MB   2016-02-21 20:47:04   False
 0B3X9GlR6EmbndVEwMlZCUldGWUlPb2lTS25rOFo1L2t6c2ZVPQ   gdrive-osx-x64   8.3 MB   2016-02-21 21:12:09   False
 ```
 
-#### Download revision
-```
+### Download revision
+
+```plaintext
 $ gdrive revision download 0B3X9GlR6EmbnNTk0SkV0bm5Hd0E 0B3X9GlR6EmbnOFlHSTZQNWJWMGN2ckZucC9VaEUwczV1cUNrPQ
 Downloading gdrive-osx-x64 -> gdrive-osx-x64
 Download complete, rate: 8.3 MB/s, total size: 8.3 MB
 ```
 
 #### Export google doc as docx
-```
+
+```plaintext
 $ gdrive export --mime application/vnd.openxmlformats-officedocument.wordprocessingml.document 1Kt5A8X7X2RQrEi5t6Y9W1LayRc4hyrFiG63y2dIJEvk
 Exported 'foo.docx' with mime type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 ```
 
 #### Import csv as google spreadsheet
-```
+
+```plaintext
 $ gdrive import foo.csv
 Imported 1mTl3DjIvap4tpTX_oMkDcbDT8ShtiGJRlozTfkXpeko with mime type: 'application/vnd.google-apps.spreadsheet'
 ```
 
 #### Syncing directory to drive
-```
+
+```plaintext
 # Create directory on drive
 $ gdrive mkdir drive-bin
 Directory 0B3X9GlR6EmbnOEd6cEh6bU9XZWM created
@@ -706,7 +762,8 @@ Sync finished in 1.890244258s
 ```
 
 #### List content of sync directory
-```
+
+```plaintext
 $ gdrive sync content 0B3X9GlR6EmbnOEd6cEh6bU9XZWM
 Id                             Path                             Type   Size     Modified
 0B3X9GlR6EmbnMldxMFV1UGVMTlE   bsd                              dir             2016-02-21 22:54:00
