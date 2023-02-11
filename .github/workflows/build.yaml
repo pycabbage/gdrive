@@ -1,0 +1,83 @@
+on:
+  push:
+  workflow_dispatch:
+
+name: Build
+jobs:
+  build:
+    name: Build ${{ matrix.osarch.GOOS }}/${{ matrix.osarch.GOARCH }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        osarch:
+        - { GOOS: 'aix', GOARCH: 'ppc64' }
+        - { GOOS: 'android', GOARCH: '386' }
+        - { GOOS: 'android', GOARCH: 'amd64' }
+        - { GOOS: 'android', GOARCH: 'arm' }
+        - { GOOS: 'android', GOARCH: 'arm64' }
+        - { GOOS: 'darwin', GOARCH: 'amd64' }
+        - { GOOS: 'darwin', GOARCH: 'arm64' }
+        - { GOOS: 'dragonfly', GOARCH: 'amd64' }
+        - { GOOS: 'freebsd', GOARCH: '386' }
+        - { GOOS: 'freebsd', GOARCH: 'amd64' }
+        - { GOOS: 'freebsd', GOARCH: 'arm' }
+        - { GOOS: 'freebsd', GOARCH: 'arm64' }
+        - { GOOS: 'illumos', GOARCH: 'amd64' }
+        - { GOOS: 'ios', GOARCH: 'amd64' }
+        - { GOOS: 'ios', GOARCH: 'arm64' }
+        - { GOOS: 'js', GOARCH: 'wasm' }
+        - { GOOS: 'linux', GOARCH: '386' }
+        - { GOOS: 'linux', GOARCH: 'amd64' }
+        - { GOOS: 'linux', GOARCH: 'arm' }
+        - { GOOS: 'linux', GOARCH: 'arm64' }
+        - { GOOS: 'linux', GOARCH: 'loong64' }
+        - { GOOS: 'linux', GOARCH: 'mips' }
+        - { GOOS: 'linux', GOARCH: 'mips64' }
+        - { GOOS: 'linux', GOARCH: 'mips64le' }
+        - { GOOS: 'linux', GOARCH: 'mipsle' }
+        - { GOOS: 'linux', GOARCH: 'ppc64' }
+        - { GOOS: 'linux', GOARCH: 'ppc64le' }
+        - { GOOS: 'linux', GOARCH: 'riscv64' }
+        - { GOOS: 'linux', GOARCH: 's390x' }
+        - { GOOS: 'netbsd', GOARCH: '386' }
+        - { GOOS: 'netbsd', GOARCH: 'amd64' }
+        - { GOOS: 'netbsd', GOARCH: 'arm' }
+        - { GOOS: 'netbsd', GOARCH: 'arm64' }
+        - { GOOS: 'openbsd', GOARCH: '386' }
+        - { GOOS: 'openbsd', GOARCH: 'amd64' }
+        - { GOOS: 'openbsd', GOARCH: 'arm' }
+        - { GOOS: 'openbsd', GOARCH: 'arm64' }
+        - { GOOS: 'openbsd', GOARCH: 'mips64' }
+        - { GOOS: 'plan9', GOARCH: '386' }
+        - { GOOS: 'plan9', GOARCH: 'amd64' }
+        - { GOOS: 'plan9', GOARCH: 'arm' }
+        - { GOOS: 'solaris', GOARCH: 'amd64' }
+        - { GOOS: 'windows', GOARCH: '386' }
+        - { GOOS: 'windows', GOARCH: 'amd64' }
+        - { GOOS: 'windows', GOARCH: 'arm' }
+        - { GOOS: 'windows', GOARCH: 'arm64' }
+      fail-fast: false
+    env:
+      GO111MODULE: on
+      NAME: gdrive-${{ matrix.osarch.GOOS }}-${{ matrix.osarch.GOARCH }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          cache: true
+          go-version: '^1.20.0'
+      - name: Detect filename
+        if: ${{ matrix.osarch.GOOS == 'windows' }}
+        run: echo 'EXTENSION=.exe' >> "$GITHUB_ENV"
+      - name: Build
+        continue-on-error: true
+        env:
+          GOOS: ${{ matrix.osarch.GOOS }}
+          GOARCH: ${{ matrix.osarch.GOARCH }}
+        run: |
+          go build -ldflags '-w -s' -o ${{ env.NAME }}${{ env.EXTENSION }}
+      - name: upload release
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.NAME }}${{ env.EXTENSION }}
+          path: ${{ env.NAME }}${{ env.EXTENSION }}
