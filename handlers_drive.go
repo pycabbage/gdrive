@@ -14,8 +14,8 @@ import (
 	"github.com/pycabbage/gdrive/drive"
 )
 
-const ClientId = "523918217787-j7ui00dcpnhelkt9si2scdvu6ccjg245.apps.googleusercontent.com"
-const ClientSecret = "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"
+const ClientId = "735814839079-2a6hp0reci94ako19bcks0r5u08m35ks.apps.googleusercontent.com"
+const ClientSecret = "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"
 const TokenFilename = "token_v2.json"
 const DefaultCacheFileName = "file_cache.json"
 
