@@ -55,9 +55,12 @@ jobs:
         # - { GOOS: 'plan9', GOARCH: 'arm' }
         # - { GOOS: 'solaris', GOARCH: 'amd64' }
         # - { GOOS: 'windows', GOARCH: '386' }
-        # - { GOOS: 'windows', GOARCH: 'amd64' }
+        - { GOOS: 'windows', GOARCH: 'amd64' }
         # - { GOOS: 'windows', GOARCH: 'arm' }
         # - { GOOS: 'windows', GOARCH: 'arm64' }
+    env:
+      GO111MODULE: on
+      NAME: gdrive-${{ matrix.osarch.GOOS }}-${{ matrix.osarch.GOARCH }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
@@ -67,15 +70,15 @@ jobs:
       - name: Detect filename
         if: ${{ matrix.osarch.GOOS == 'windows' }}
         run: echo 'EXTENSION=.exe' >> "$GITHUB_ENV"
-      - name: compile and release
+      - name: Build
         continue-on-error: true
         env:
           GOOS: ${{ matrix.osarch.GOOS }}
           GOARCH: ${{ matrix.osarch.GOARCH }}
         run: |
-          go build -ldflags '-w -s' -o gdrive-${{ matrix.os }}-${{ matrix.arch }}${{ env.EXTENSION }}
+          go build -ldflags '-w -s' -o ${{ env.NAME }}${{ env.EXTENSION }}
       - name: upload release
         uses: actions/upload-artifact@v2
         with:
-          name: gdrive-${{ matrix.os }}-${{ matrix.arch }}${{ env.EXTENSION }}
-          path: gdrive-${{ matrix.os }}-${{ matrix.arch }}${{ env.EXTENSION }}
+          name: ${{ env.NAME }}${{ env.EXTENSION }}
+          path: ${{ env.NAME }}${{ env.EXTENSION }}
