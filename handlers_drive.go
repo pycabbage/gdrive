@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -14,8 +13,9 @@ import (
 	"github.com/pycabbage/gdrive/drive"
 )
 
-const ClientId = "735814839079-2a6hp0reci94ako19bcks0r5u08m35ks.apps.googleusercontent.com"
-const ClientSecret = "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"
+// type: OAuth client, Desktop client
+const ClientId = "735814839079-iu5krimcitbi7q1vm75m194e6mtguh6a.apps.googleusercontent.com"
+const ClientSecret = "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"
 const TokenFilename = "token_v2.json"
 const DefaultCacheFileName = "file_cache.json"
 
@@ -407,7 +407,7 @@ func authCodePrompt(url string) func() string {
 
 func progressWriter(discard bool) io.Writer {
 	if discard {
-		return ioutil.Discard
+		return io.Discard
 	}
 	return os.Stderr
 }
